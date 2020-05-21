@@ -8,10 +8,10 @@ class CartesianNode(Node):
         self.x = x
         self.y = y
 
-    def distanceTo(self, node: CartesianNode):
+    def distanceTo(self, node):
         return CartesianNode.distance(self, node)
 
     @staticmethod
-    def distance(u: CartesianNode, v: CartesianNode):
+    def distance(u, v):
         return math.sqrt((u.x - v.x)**2 + (u.y - v.y)**2)
 
