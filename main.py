@@ -71,5 +71,12 @@ for trip in departures:
         normalizedDay = normalizeDay(day)
         if(isWithinDay(normalizedDay, time_interval[0], time_interval[1])):
             # Create available start node
-            print("Found " + day)
+            node = CartesianNode(
+                {
+                    "city": from_city,
+                    "time": departure_time,
+                    "day": normalizedDay
+                }, float(kb.cities[from_city]["x"]), float(kb.cities[from_city]["y"]))
+            parent = GraphAlgorithms.exploringAStar(
+                node, to_city, time_interval[1], kb)
 
