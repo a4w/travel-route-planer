@@ -40,7 +40,7 @@ class FlightKnowledgeExtractor:
 
                     # Add flight
                     flight = Flight(self.cities[sourceCity], self.cities[destinationCity], Timestamp(
-                        day, departureTime), Timestamp(Timestamp.restoreDay(arrival), arrivalTime))
+                        day, departureTime), Timestamp(Timestamp.restoreDay(arrival), arrivalTime), flightNumber)
                     # self.flights.append(flight)
                     self.cities[sourceCity].addFlight(flight)
 
