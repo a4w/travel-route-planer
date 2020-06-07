@@ -6,10 +6,10 @@ kb = FlightKnowledgeExtractor(
 cities = kb.getCities()
 
 # Inputs
-from_city = "Aswan"
-to_city = "London"
-start_time = "sun"
-end_time = "sun"
+from_city = str(input("Source city: "))
+to_city = str(input("Destination city: "))
+start_time = str(input("Start day: "))
+end_time = str(input("End day: "))
 
 planner = TravelRoutePlanner(kb, from_city, to_city, start_time, end_time)
 for i in range(7):
