@@ -49,7 +49,7 @@ class Timestamp:
         if(start.day <= end.day):
             return subject.day >= start.day and subject.day <= end.day and time_check
         else:
-            return subject.day < start.day and subject.day > end.day and time_check
+            return ((subject.day >= start.day and subject.day < len(Timestamp.days)) or (subject.day >= 0 and subject.day <= end.day)) and time_check
 
     @staticmethod
     def calculateDuration(source, destination) -> int:
