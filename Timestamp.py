@@ -69,4 +69,6 @@ class Timestamp:
         return time
 
     def __str__(self):
-        return self.restoreDay(self.day) + " at " + self.restoreClock(self.time)
+        day = self.restoreDay(self.day)
+        day = day[0].upper() + day[1:]
+        return day + " at " + self.restoreClock(self.time)
