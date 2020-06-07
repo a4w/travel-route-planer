@@ -22,7 +22,7 @@ class TravelRoutePlanner:
         for x in route:
             print(x)
 
-    def _plan(self):
+    def _plan(self) -> list:
         upcoming = PriorityQueue()
         # We add a tuple, first element is the cost, the second is the node
         upcoming.put((0, self.fromCity))
