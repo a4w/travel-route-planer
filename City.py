@@ -21,10 +21,10 @@ class City:
         return self.flights
 
     @staticmethod
-    def distance(source, destination):
+    def distance(source, destination) -> float:
         return math.sqrt((source.latitue - destination.latitue)**2 + (source.longitude - destination.longitude)**2)
 
-    def distanceTo(self, city):
+    def distanceTo(self, city) -> float:
         return City.distance(self, city)
 
     def __hash__(self):
