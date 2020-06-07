@@ -73,7 +73,8 @@ class TravelRoutePlanner:
                     costs[flight.destinationCity] = newCost
                     timestamps[flight.destinationCity] = flight.arrival
                     # Add the heuristic cost
-                    newCost = newCost + 0
+                    newCost = newCost + \
+                        current.distanceTo(flight.destinationCity)
                     # Calculate heuristic
                     upcoming.put((newCost, flight.destinationCity))
 
