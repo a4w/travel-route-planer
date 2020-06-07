@@ -21,11 +21,11 @@ class Timestamp:
         return ("0" + str(hour))[-2:] + ":" + ("0" + str(minute))[-2:]
 
     @staticmethod
-    def nextDay(dayIdx: int):
+    def nextDay(dayIdx: int) -> int:
         return (dayIdx + 1) % len(Timestamp.days)
 
     @staticmethod
-    def prevDay(dayIdx: int):
+    def prevDay(dayIdx: int) -> int:
         return (dayIdx + 6) % len(Timestamp.days)
 
     @staticmethod
@@ -37,7 +37,7 @@ class Timestamp:
         return hour * 60 + minutes
 
     @staticmethod
-    def within(subject, start, end):
+    def within(subject, start, end) -> bool:
         time_check = True
 
         if(subject.day == start.day):
@@ -52,7 +52,7 @@ class Timestamp:
             return subject.day < start.day and subject.day > end.day and time_check
 
     @staticmethod
-    def calculateDuration(source, destination):
+    def calculateDuration(source, destination) -> int:
         time = 0
         DAY_COST = 24 * 60  # Number of minutes in one day
         if(source.day < destination.day):
