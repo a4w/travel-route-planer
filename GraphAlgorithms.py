@@ -1,6 +1,19 @@
 from Node import Node
 from CartesianNode import CartesianNode
 from queue import PriorityQueue
+from queue import Queue
+
+
+def calculateDuration(source: dict, destination: dict) -> int:
+    time = 0
+    DAY_COST = 24 * 60  # Number of minutes in one day
+    if(source["day"] <= destination["day"]):
+        time = (destination["day"] - source["day"]) * DAY_COST
+    else:
+        time = (7 - (source["day"] - destination["day"])) * DAY_COST
+    time = time + destination["time"]
+    time = time - source["time"]
+    return time
 
 
 def normalizeDay(day: str):
@@ -109,7 +122,7 @@ class GraphAlgorithms():
         raise Exception("No path between source and destination found")
 
     @staticmethod
-    def exploringAStar(startNode: CartesianNode, to_city: str, end_day: int, knowledge):
+    def exploringAStar(startNode: CartesianNode, to_city: str, end_day: int, knowledge, speed):
         upcoming = PriorityQueue()
         # We add a tuple, first element is the cost, the second is the node
         upcoming.put((0, startNode))
@@ -121,31 +134,39 @@ class GraphAlgorithms():
         costs = dict()
         costs[startNode] = 0
 
-        currentTime = startNode.value["time"]
-
         while not upcoming.empty():
             current: CartesianNode = upcoming.get()[1]
 
             # Check if we found the destination
             if(current.value["city"] == to_city):
-                return parent
+                return (parent, current)
 
             # Prepare neighbours
             nextMoves = knowledge.timetable[current.value["city"]]
+            print(current.value["city"])
             for move in nextMoves:
+                print(move)
                 departure_days = str(move[4]).strip("[]").split(",")
                 for day in departure_days:
                     day = day.strip()
                     normalizedDay = normalizeDay(day)
                     if(isWithinDay(normalizedDay, current.value["day"], end_day)):
+                        # Check time as well
+                        if(normalizedDay == current.value["day"] and normalizeClock(move[1]) < current.value["time"]):
+                            continue
+
                         # Ok add as neighbour
+                        arrival_day = normalizedDay
+                        if(normalizeClock(move[2]) < normalizeClock(move[1])):
+                            arrival_day = (arrival_day + 1) % 7
                         node = CartesianNode(
                             {
                                 "city": move[0],
-                                "time": move[2],
-                                "day": normalizedDay
+                                "time": normalizeClock(move[2]),
+                                "day": arrival_day
                             }, float(knowledge.cities[move[0]]["x"]), float(knowledge.cities[move[0]]["y"]))
-                        print(node.value)
+                        current.neighbours.append(
+                            (node, calculateDuration(current.value, node.value)))
 
             for adj in current.neighbours:
                 # Adjacent node
@@ -156,11 +177,18 @@ class GraphAlgorithms():
                 # New cost to neighbour
                 newCost: int = costs[current] + cost
 
+                print("Cost from " + str(current.value["city"]) + " at " + str(node.value["day"]) + " " + str(node.value["time"]) + " to " + str(
+                    node.value["city"]) + " is " + str(newCost))
+
                 if(node not in costs or newCost < costs[node]):
                     parent[node] = current
                     costs[node] = newCost
                     # Add the heuristic cost
-                    newCost = newCost + node.distanceTo(endNode)
+                    endNode = CartesianNode(
+                        None, knowledge.cities[to_city]["x"], knowledge.cities[to_city]["y"])
+                    # Since we work with times, we need to convert distance to time
+                    newCost = newCost + node.distanceTo(endNode) / speed
+                    # Calculate heuristic
                     upcoming.put((newCost, node))
 
         # No path found
