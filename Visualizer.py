@@ -9,7 +9,7 @@ class Visualizer:
     VISITED_COLOR = '#045582'
     FOUND_COLOR = '#009900'
 
-    RATE = 0.3
+    RATE = 0.1
 
     def __init__(self, cities, draw=True):
         self.cities = cities
