@@ -1,5 +1,6 @@
 from FlightKnowledgeExtractor import FlightKnowledgeExtractor
 from TravelRoutePlanner import TravelRoutePlanner
+import matplotlib.pyplot as plt
 
 kb = FlightKnowledgeExtractor(
     "./knowledge/cities.csv", "./knowledge/timetable.csv")
@@ -20,3 +21,4 @@ for i in range(7):
         print("No route found in range, increasing start and end dates")
         planner.widenRange()
 
+plt.show()

@@ -24,6 +24,7 @@ class TravelRoutePlanner:
 
     def _plan(self) -> list:
         upcoming = PriorityQueue()
+        self.knowledge.resetGraph()
         # We add a tuple, first element is the cost, the second is the node
         upcoming.put((0, self.fromCity))
 
@@ -41,12 +42,14 @@ class TravelRoutePlanner:
 
         while not upcoming.empty():
             current: City = upcoming.get()[1]
+            self.knowledge.visitGraphNode(current.name)
 
             # Check if we found the destination
             if(current == self.toCity):
                 # Unroll parents
                 route = list()
                 city = self.toCity
+                self.knowledge.visitGraphNode(current.name, True)
                 while(city in path):
                     flight = path[city][1]
                     route.append(flight)
@@ -76,7 +79,9 @@ class TravelRoutePlanner:
                     newCost = newCost + \
                         current.distanceTo(flight.destinationCity)
                     # Calculate heuristic
-                    upcoming.put((newCost, flight.destinationCity))
+                    upcoming.put((-newCost, flight.destinationCity))
+                    self.knowledge.markAvailableGraphNode(
+                        flight.destinationCity.name)
 
         # No path found
         raise Exception("No path between source and destination found")
