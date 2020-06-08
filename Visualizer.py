@@ -9,6 +9,8 @@ class Visualizer:
     VISITED_COLOR = '#045582'
     FOUND_COLOR = '#009900'
 
+    RATE = 0.3
+
     def __init__(self, cities, draw=True):
         self.cities = cities
         self.graph = nx.Graph()
@@ -19,7 +21,9 @@ class Visualizer:
             self.graph.nodes[city.name]["node_color"] = self.NODE_COLOR
             self.update(0)
 
-    def update(self, wait=0.5):
+    def update(self, wait=None):
+        if(wait == None):
+            wait = self.RATE
         if(not self.draw):
             return
         time.sleep(wait)
