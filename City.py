@@ -4,7 +4,7 @@ import math
 class City:
     def __init__(self, name: str, latitude: float, longitude: float):
         self.name = name
-        self.latitue = latitude
+        self.latitude = latitude
         self.longitude = longitude
         self.flights = list()
 
@@ -22,7 +22,7 @@ class City:
 
     @staticmethod
     def distance(source, destination) -> float:
-        return math.sqrt((source.latitue - destination.latitue)**2 + (source.longitude - destination.longitude)**2)
+        return math.sqrt((source.latitude - destination.latitude)**2 + (source.longitude - destination.longitude)**2)
 
     def distanceTo(self, city) -> float:
         return City.distance(self, city)
