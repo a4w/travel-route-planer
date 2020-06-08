@@ -1,17 +1,19 @@
 from City import City
 from Timestamp import Timestamp
 from FlightKnowledgeExtractor import FlightKnowledgeExtractor
+from Visualizer import Visualizer
 from queue import PriorityQueue
 
 
 class TravelRoutePlanner:
-    def __init__(self, knowledge: FlightKnowledgeExtractor, fromCity, toCity, startDay, endDay):
+    def __init__(self, knowledge: FlightKnowledgeExtractor, fromCity, toCity, startDay, endDay, visualize=False):
         self.knowledge = knowledge
         self.cities = knowledge.getCities()
         self.fromCity = self.cities[fromCity]
         self.toCity = self.cities[toCity]
         self.startDay = Timestamp.normalizeDay(startDay)
         self.endDay = Timestamp.normalizeDay(endDay)
+        self.visualizer = Visualizer(self.cities, visualize)
 
     def widenRange(self):
         self.startDay = Timestamp.prevDay(self.startDay)
@@ -24,7 +26,9 @@ class TravelRoutePlanner:
 
     def _plan(self) -> list:
         upcoming = PriorityQueue()
-        self.knowledge.resetGraph()
+
+        self.visualizer.reset()
+
         # We add a tuple, first element is the cost, the second is the node
         upcoming.put((0, self.fromCity))
 
@@ -42,14 +46,14 @@ class TravelRoutePlanner:
 
         while not upcoming.empty():
             current: City = upcoming.get()[1]
-            self.knowledge.visitGraphNode(current.name)
+            self.visualizer.visit(current.name)
 
             # Check if we found the destination
             if(current == self.toCity):
                 # Unroll parents
                 route = list()
                 city = self.toCity
-                self.knowledge.visitGraphNode(current.name, True)
+                self.visualizer.visit(current.name, True)
                 while(city in path):
                     flight = path[city][1]
                     route.append(flight)
@@ -80,7 +84,7 @@ class TravelRoutePlanner:
                         current.distanceTo(flight.destinationCity)
                     # Calculate heuristic
                     upcoming.put((-newCost, flight.destinationCity))
-                    self.knowledge.markAvailableGraphNode(
+                    self.visualizer.markAvailable(
                         flight.destinationCity.name)
 
         # No path found
