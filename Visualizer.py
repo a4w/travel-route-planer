@@ -55,3 +55,6 @@ class Visualizer:
 
     def closeVisualizer(self):
         plt.close()
+
+    def freeze(self):
+        plt.show()

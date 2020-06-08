@@ -23,6 +23,7 @@ class TravelRoutePlanner:
         route = self._plan()
         for x in route:
             print(x)
+        self.visualizer.freeze()
 
     def _plan(self) -> list:
         upcoming = PriorityQueue()
@@ -45,8 +46,11 @@ class TravelRoutePlanner:
             Timestamp.restoreDay(self.endDay), "23:59")
 
         while not upcoming.empty():
-            current: City = upcoming.get()[1]
+            tu = upcoming.get()
+            current: City = tu[1]
             self.visualizer.visit(current.name)
+            print("Visiting " + current.name +
+                  " with cost " + str(tu[0]))
 
             # Check if we found the destination
             if(current == self.toCity):
@@ -83,7 +87,7 @@ class TravelRoutePlanner:
                     newCost = newCost + \
                         current.distanceTo(flight.destinationCity)
                     # Calculate heuristic
-                    upcoming.put((-newCost, flight.destinationCity))
+                    upcoming.put((newCost, flight.destinationCity))
                     self.visualizer.markAvailable(
                         flight.destinationCity.name)
 
