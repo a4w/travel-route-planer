@@ -49,8 +49,6 @@ class TravelRoutePlanner:
             tu = upcoming.get()
             current: City = tu[1]
             self.visualizer.visit(current.name)
-            print("Visiting " + current.name +
-                  " with cost " + str(tu[0]))
 
             # Check if we found the destination
             if(current == self.toCity):
