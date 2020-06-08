@@ -1,6 +1,5 @@
 from FlightKnowledgeExtractor import FlightKnowledgeExtractor
 from TravelRoutePlanner import TravelRoutePlanner
-import matplotlib.pyplot as plt
 
 kb = FlightKnowledgeExtractor(
     "./knowledge/cities.csv", "./knowledge/timetable.csv")
@@ -11,8 +10,10 @@ from_city = str(input("Source city: "))
 to_city = str(input("Destination city: "))
 start_time = str(input("Start day: "))
 end_time = str(input("End day: "))
+visualize = str(input("Visualize? (y/n): ")) == "y"
 
-planner = TravelRoutePlanner(kb, from_city, to_city, start_time, end_time)
+planner = TravelRoutePlanner(
+    kb, from_city, to_city, start_time, end_time, visualize)
 for i in range(7):
     try:
         planner.printOptimalPath()
@@ -21,4 +22,3 @@ for i in range(7):
         print("No route found in range, increasing start and end dates")
         planner.widenRange()
 
-plt.show()
