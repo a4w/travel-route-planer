@@ -5,7 +5,7 @@ from queue import PriorityQueue
 
 
 class TravelRoutePlanner:
-    def __init__(self, knowledge: FlightKnowledgeExtractor, fromCity: City, toCity: City, startDay, endDay):
+    def __init__(self, knowledge: FlightKnowledgeExtractor, fromCity, toCity, startDay, endDay):
         self.knowledge = knowledge
         self.cities = knowledge.getCities()
         self.fromCity = self.cities[fromCity]
