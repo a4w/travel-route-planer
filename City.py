@@ -1,4 +1,4 @@
-import math
+from math import sin, cos, sqrt, atan2, radians
 
 
 class City:
@@ -22,7 +22,18 @@ class City:
 
     @staticmethod
     def distance(source, destination) -> float:
-        return math.sqrt((source.latitude - destination.latitude)**2 + (source.longitude - destination.longitude)**2)
+        # approximate radius of earth in km
+        R = 6373.0
+        lat1 = radians(source.latitude)
+        lon1 = radians(source.longitude)
+        lat2 = radians(destination.latitude)
+        lon2 = radians(destination.longitude)
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+        c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        distance = R * c
+        return distance
 
     def distanceTo(self, city) -> float:
         return City.distance(self, city)
